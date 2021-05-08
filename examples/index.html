@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../DataCollection.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        #code, #result{
+            display: block;
+            min-width: 10rem;
+            width: 100%;
+            min-height: 10rem;
+            height: 100%;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        #run {
+            display: block;
+            min-width: 10rem;
+            width: 100%;
+            min-height: 2rem;
+            font-size: larger;
+            background-color: teal;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    window.dataCollection = new DataCollection({file: "movies.json", timeout: 5000, workerDir: "../"});
+    function log(...args){ document.getElementById("result").innerText += args.map(a => JSON.stringify(a)).join(", ")+"\n"};
+    console.log = log;
+    console.warn = log;
+    console.info = log;
+    console.error = log;
+    window.console = console;
+
+</script>
+<textarea spellcheck="false" autocomplete="off" id="code">
+// already done beforehand:
+// const dataCollection = new DataCollection({file: "movies.json", timeout: 5000, workerDir: "../"});
+
+dataCollection.between("year",1990, 2020).sum("revenue").result().then(console.log);
+</textarea>
+<button id="run">execute</button>
+<div id="result">
+
+</div>
+<script>
+document.getElementById("run").addEventListener("click", () => {
+    document.getElementById("result").innerText = "";
+    const code = document.getElementById("code").value;
+    eval(code)
+});
+</script>
+</body>
+</html>
